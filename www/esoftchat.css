@@ -1,0 +1,36 @@
+#adduserp {
+}
+#deleteuserp {
+}
+.mainblock {
+	color: #C71585;
+	display: block;
+	width: 25%;
+	margin: 10px;
+	border: 3px solid #000; 
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	padding: 10px;
+	border-radius: 10px; /* Радиус скругления */
+/*	display: flex;
+	flex-direction: column;
+	align-items: center*/
+}
+#mainheader {
+	background-color: #FFC0CB;
+}
+body {
+	font-family: Georgia, Calibri, sans-serif;
+	background-color: #FFEFD5;
+	display: flex;
+	flex-direction: column;
+/*	justify-content: center;*/
+	align-items: center;
+	/*flex: none;*/
+}
+h2 {
+	text-align: center
+}
+.centerbutton {
+	text-align: center;
+	font-size: 16pt;
+}
