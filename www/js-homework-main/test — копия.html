@@ -1,0 +1,70 @@
+<html>
+<head>
+    <script>
+    class Validator {
+        constructor() {
+            this._errors = [];
+        }
+
+        get Errors() {
+            return this._errors;
+        }
+        /**
+         *
+         * @param schema
+         * @param dataToValidate
+         * @returns {boolean}
+         */
+        isValid(schema = {}, dataToValidate) {
+            var possTypes = ['number', 'string', 'boolean', 'object', 'array'];
+            var ifNullable = [true, false];
+            for (var key in schema) {
+                switch (key) {
+                    case "type":
+                        try {
+                            var checkType = ((possTypes.includes(schema["type"])) && (typeof (dataToValidate) == schema['type'])) ? true : false;
+                            document.write("Checktype result :" +checkType+ '<br>');
+                        } catch (myError) {
+                            console.log(myError);
+                            this.Errors.push(myError);
+                            document.write("No such type!");
+                        }
+                        break
+                    case "nullable":
+                        try {
+                            // var isNull = (dataToValidate === null) ? true : false;
+                            if ((schema["nullable"] == false) &&(dataToValidate === null)) {
+                                throw new TypeError('Value is null, but nullable false');
+                            } else {
+                                continue
+                            }
+                        } catch (myError){
+                            console.log(myError);
+                            this.Errors.push(myError);
+                        }
+                        break
+                    case "anyOf":
+
+                    case "oneOf":
+                }
+            }
+            return (this.Errors.length == 0) ? true : false;
+        }
+
+    }
+    validator = new Validator();
+    const isValid = validator.isValid({
+        type: 'number',
+        nullable: true
+    }, null);
+    document.write('<br>' + "isValid result: " + isValid + "<br>")
+    const isValid2 = validator.isValid({
+        type: 'number',
+        nullable: false
+    }, null);
+    document.write('<br>' + "isValid2 result: " + isValid2 + "<br>")
+    </script>
+</head>
+<body>
+</body>
+</html>
