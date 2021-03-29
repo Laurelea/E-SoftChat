@@ -4,6 +4,7 @@
     class Validator {
         constructor() {
             this._errors = [];
+            this._flag = true;
         }
 
         get Errors() {
@@ -15,54 +16,371 @@
          * @param dataToValidate
          * @returns {boolean}
          */
+        numberFunction (schema = {}, dataToValidate) {
+            document.write("Data to validate: "+dataToValidate+"<br>");
+            for (var key in schema) { //обращаемся к индексам
+                document.write("Current schema is: " + key + " " + schema[key] + "<br>")
+                // document.write(+ schema +"<br>");
+                switch (key) {
+                    case "minimum" :
+                        document.write("Minimum!<br>");
+                        if (dataToValidate < schema["minimum"]) {
+                            this.Errors.push('Value is less than it can be');
+                            this._flag = false;
+                        }
+                        break
+                    case "maximum" :
+                        document.write("Maximum!<br>");
+                        if (dataToValidate > schema["maximum"]) {
+                            this.Errors.push('Value is greater than it can be');
+                            this._flag = false;
+                        }
+                        break
+                    case "enum" :
+                        document.write("Enum!<br>");
+                        document.write("Enum list: " + schema["enum"]+ '<br>');
+                        document.write("Data to validate:" + dataToValidate + '<br>');
+                        document.write("Is included: "+ schema["enum"].includes(dataToValidate)+"<br>");
+                        if (!(schema["enum"].includes(dataToValidate))) {
+                            this.Errors.push('The enum does not support value');
+                            this._flag = false;
+                        }
+                        break
+                }
+            }
+            console.log(this._errors);
+            return this._flag;
+        }
+        stringFunction (schema = {}, dataToValidate) {
+            document.write("Data to validate: "+dataToValidate+"<br>");
+            for (var key in schema) { //обращаемся к индексам
+                document.write("Current schema is: " + key + " " + schema[key] + "<br>")
+                // document.write(+ schema +"<br>");
+                switch (key) {
+                    case "minLength" :
+                        document.write("MinLength!<br>");
+                        if (dataToValidate.length < schema["minLength"]) {
+                            this.Errors.push('Too short string');
+                            this._flag = false;
+                        }
+                        break
+                    case "maxLength" :
+                        document.write("Maxlength!<br>");
+                        if (dataToValidate.length > schema["maxlength"]) {
+                            this.Errors.push('Too long string');
+                            this._flag = false;
+                        }
+                        break
+                    case "pattern" :
+                        document.write("Regular!<br>");
+                        if (dataToValidate.match(schema["pattern"]) == null) {
+                            this.Errors.push('String does not match pattern');
+                            this._flag = false;
+                        }
+                        break
+                    case "enum" :
+                        if (!(schema["enum"].includes(dataToValidate))) {
+                            this.Errors.push('The enum does not support value');
+                            this._flag = false;
+                        }
+                        break
+                    case "format" :
+                        if (((schema["format"] == "email") && (dataToValidate.match(/^[^\s@]+@[^\s@]+$/) == null)) ||
+                            ((schema["format"] == "date") && (dataToValidate.match(/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/) == null))) {
+                            this.Errors.push('Format of string is not valid');
+                            this._flag = false;
+                        }
+                        break
+                }
+                }
+            return this._flag;
+
+        }
+        objectFunction (schema = {}, dataToValidate) {
+            document.write("Data to validate: "+dataToValidate+"<br>");
+            for (var key in schema) { //обращаемся к индексам
+                document.write("Current schema is: " + key + " " + schema[key] + "<br>")
+                // document.write(+ schema +"<br>");
+                switch (key) {
+                    case "minProperties" :
+                        document.write("MinProperties!<br>");
+                        console.log("Object.keys(dataToValidate).length " + Object.keys(dataToValidate).length)
+                        console.log("schema[\"minproperties\"] " + schema["minProperties"])
+                        if (Object.keys(dataToValidate).length < schema["minProperties"]) {
+                            this.Errors.push('Too few properties in object');
+                            this._flag = false;
+                        }
+                        break
+                    case "maxProperties" :
+                        document.write("Maxproperties!<br>");
+                        if (Object.keys(dataToValidate).length > schema["maxProperties"]) {
+                            this.Errors.push('Too many properties in object');
+                            this._flag = false;
+                        }
+                        break
+                    case "required" :
+                        // document.write("Required!<br>");
+                        const setDatatoval = Object.keys(dataToValidate);
+                        document.write("Keys of Data to validate: " +setDatatoval+ "<br>");
+                        // document.write("Keys of schema: " +schema["required"]+ "<br>");
+                        // const myIntersection = setDatatoval.filter(x => schema["required"].includes(x))
+                        // console.log("Intersection: " + myIntersection);
+                        // console.log("If equal :" +  myIntersection == schema["required"]);
+                        // // var b = Object.keys(dataToValidate).filter(x => schema["required"].includes(x)) == schema["required"];
+                        // if (Array.from(Object.keys(dataToValidate)).includes(schema["required"]) == false) this.Errors.push('Property required, but value is undefined');
+                        // break
+                        for (var i in schema["required"]) {
+                            document.write("Curr elem: " + i + "<br>")
+                            if (!(Object.keys(dataToValidate).includes(schema["required"][i]))) {
+                                this.Errors.push('Property required, but value is undefined');
+                                this._flag = false;
+                            }
+                        }
+                        break
+                    case "properties" :
+                        document.write("Properties!!<br>");
+                        for (var elem in schema["properties"]) {
+
+                            //Это чисто для проверки:
+                            document.write("Current elem is: " + elem +"<br>")
+                            document.write("What to put in new Validator: "+ "<br>");
+                            document.write("Instead of schema: schema[\"properties\"].elem"+ ' ' +schema["properties"][elem]+"<br>");
+                            document.write("<br>" + "Current schema: " + "<br>");
+                            for (var key in schema["properties"][elem]) { //обращаемся к индексам
+                                document.write(key, ' ', schema["properties"][elem][key], '<br>')
+                            }
+                            document.write("<br>")
+                            document.write("Instead of data: dataToValidate[elem]"+ ' ' + dataToValidate[elem]+"<br>");
+                            console.log(dataToValidate[elem]);
+
+                            //А вот пошёл сам код:
+                            // const propValidator = new Validator();
+                            //дописать после arrays:
+                            const addIsValid = this.isValid(schema["properties"][elem], dataToValidate[elem]);
+                            document.write("Prop check result: " + addIsValid + "<br><br>");
+                        }
+                            break
+                    case "additionalProperties" :
+                        document.write("Add prop!<br>");
+                        if (schema["additionalProperties"] == false) {
+                            const poolKeys = Object.keys(schema["properties"]);
+                            const dataKeys = Object.keys(dataToValidate);
+                            const diff = dataKeys.filter(x => !poolKeys.includes(x));
+                            console.log(diff);
+                            if (diff.length > 0) {
+                                this.Errors.push('An object cant have additional properties');
+                                this._flag = false;
+                            }
+                        }
+                        break
+                }
+            }
+            console.log("Finished Object Func")
+            console.log(this._errors)
+            return this._flag;
+
+        }
+        arrayFunction (schema = {}, dataToValidate) {
+            document.write("Data to validate: "+dataToValidate+"<br>");
+            for (var key in schema) { //обращаемся к индексам
+                document.write("Current schema is: " + key + " " + schema[key] + "<br>")
+                // document.write(+ schema +"<br>");
+                switch (key) {
+                    case "minItems" :
+                        document.write("MinItems!<br>");
+                        if (dataToValidate.length < schema["minItems"]) {
+                            this.Errors.push('Items count less than can be');
+                            this._flag = false;
+                        }
+                        break
+                    case "maxItems" :
+                        document.write("MaxItesm!<br>");
+                        if (dataToValidate.length > schema["maxItems"]) {
+                            this.Errors.push('Items count more than can be');
+                            this._flag = false;
+                        }
+                        break
+                    case "items" :
+                        document.write("Items!<br>");
+                        if (Object.keys(schema['items']).length > 1) {
+                            const posItemTypes = []
+                            for (var elem in schema["items"]) {
+                                document.write("Element: " + elem + "<br>");
+                                document.write("Contents: " + schema["items"].elem + "<br>");
+                                posItemTypes.push(schema["items"][elem]["type"]);
+                                console.log("Type: " + posItemTypes);
+                            }
+                            for (var elem in dataToValidate) {
+                                if (!(posItemTypes.includes(typeof dataToValidate[elem]))) {
+                                    this.Errors.push('Type is incorrect');
+                                    this._flag = false;
+                                }
+                            }
+                        } else {
+                            for (var elem in dataToValidate) {
+                                if ((typeof dataToValidate[elem]) != schema["items"]["type"]) {
+                                    this.Errors.push('Type is incorrect');
+                                    this._flag = false;
+                                }
+                            }
+                        }
+                        break
+                    case "enum" :
+                        document.write("Enum!<br>");
+                        // console.log(dataToValidate, typeof dataToValidate);
+                        // console.log(schema["enum"], typeof schema["enum"]);
+                        if (!(schema["enum"].includes(dataToValidate))) {
+                            this.Errors.push('The enum does not support one of array elements');
+                            this._flag = false;
+                        }
+                        // for (var i in dataToValidate) {
+                        //     console.log("Curr elem: " + i + ' ' + dataToValidate[i]);
+                        //     console.log((schema["enum"].includes(dataToValidate[i])));
+                        //     if (!(schema["enum"].includes(dataToValidate[i]))) this.Errors.push('The enum does not support one of array elements')
+                        // }
+                        break
+                    case "contains" :
+                        if (!(dataToValidate.includes(schema["contains"]))) {
+                            this.Errors.push('Must contain a value, but does not');
+                            this._flag = false;
+                        }
+                        break
+                    case "uniqueItems" :
+                        document.write("Case Unique!" + "<br>");
+                        const tryJSON = dataToValidate.map((object) => JSON.stringify(object));
+                        const uSet = new Set(tryJSON);
+                        const uniqueElems = Array.from(uSet);
+                        const uObjByCont = uniqueElems.map((string) => JSON.parse(string));
+
+                        console.log("uniqueElems: " + uniqueElems);
+                        document.write("Length: " + uniqueElems.length + "<br>");
+                        if (uniqueElems.length< dataToValidate.length) {
+                            this.Errors.push('Elements of array not unique');
+                            this._flag = false;
+                        }
+                        break
+                }
+
+            }
+            return this._flag;
+
+        }
         isValid(schema = {}, dataToValidate) {
-            var possTypes = ['number', 'string', 'boolean', 'object', 'array'];
-            var ifNullable = [true, false];
             for (var key in schema) {
                 switch (key) {
                     case "type":
-                        try {
-                            var checkType = ((possTypes.includes(schema["type"])) && (typeof (dataToValidate) == schema['type'])) ? true : false;
-                            document.write("Checktype result :" +checkType+ '<br>');
-                        } catch (myError) {
-                            console.log(myError);
-                            this.Errors.push(myError);
-                            document.write("No such type!");
+                        //Проверяем на ноль:
+
+                        if ((schema["nullable"] == false) &&(dataToValidate === null)) {
+                            this.Errors.push('Value is null, but nullable false');
+                            this._flag = false;
+                        } else {
+                            //Пишем отчёт, что всё хорошо
+                            document.write("Null stuff OK" + "<br>");
                         }
-                        break
-                    case "nullable":
-                        try {
-                            // var isNull = (dataToValidate === null) ? true : false;
-                            if ((schema["nullable"] == false) &&(dataToValidate === null)) {
-                                throw new TypeError('Value is null, but nullable false');
+
+                        //Проверяем, есть ли такой тип в списке:
+                        const possTypes = ['number', 'string', 'boolean', 'object', 'array'];
+                            if (!(possTypes.includes(schema["type"]))) {
+                                this.Errors.push("Unknown type");
+                                this._flag = false;
                             } else {
-                                continue
+                                //Пишем отчёт, что всё хорошо
+                                document.write("Type is in the list OK" + "<br>");
                             }
-                        } catch (myError){
-                            console.log(myError);
-                            this.Errors.push(myError);
+
+                        //Проверяем, соответствуют ли данные указанному типу (если они не null):
+                        const checkTypeOfData = Array.isArray(dataToValidate) ? "array": typeof (dataToValidate)
+                        if (!(checkTypeOfData == schema['type']) && !(schema["nullable"])) {
+                            this.Errors.push("Type is incorrect");
+                            this._flag = false;
+                            console.log(this.Errors);
+
+                        } else {
+                            //Пишем отчёт, что всё хорошо
+                            document.write("Type of data matches, OK" + "<br>");
+                        }
+
+                        //Начинаем проверять по типам данных:
+                        document.write("The type to check further: " + schema["type"] + '<br>');
+
+                        switch (schema["type"]) {
+                            case "number" :
+                                document.write("It's a number! ->" + schema["type"]+"<br>");
+                                document.write("NumberFunction result: "+ this.numberFunction(schema, dataToValidate)+"<br>");
+                                break
+                            case "string" :
+                                document.write("It's a string! ->" +schema["type"]+ "<br>");
+                                document.write("StringFunction result: "+ this.stringFunction(schema, dataToValidate)+"<br>");
+                                break
+                            case "object":
+                                document.write("It's an object! ->" +schema["type"]+ "<br>");
+                                document.write("ObjectFunction result: "+ this.objectFunction(schema, dataToValidate)+"<br>");
+                                break
+                            case "array":
+                                document.write("It's an array! ->" +schema["type"]+ "<br>");
+                                document.write("ArrayFunction result: "+ this.arrayFunction(schema, dataToValidate)+"<br>");
+                                break
                         }
                         break
                     case "anyOf":
-
+                        const anyArray = [];
+                        console.log(anyArray);
+                        for (var i in schema["anyOf"]) {
+                            console.log(schema["anyOf"][i]);
+                            this._flag = true;
+                            anyArray.push(this.isValid(schema["anyOf"][i], dataToValidate));
+                            console.log(anyArray);
+                        }
+                        console.log(anyArray.every(x => x == false));
+                        if (anyArray.every(x => x == false)) {
+                            console.log("All false here")
+                            this.Errors.unshift('None schemas are valid');
+                            this._flag = false;
+                            console.log("Flag changed")
+                        }
+                        break
                     case "oneOf":
+                        const oneArray = [];
+                        for ( var i in schema["oneOf"]) {
+                            console.log(schema["oneOf"][i]);
+                            this._flag = true;
+                            oneArray.push(this.isValid(schema["oneOf"][i], dataToValidate));
+                            console.log("oneArray: " + oneArray);
+                        }
+                        if (oneArray.every(x => x == false)) {
+                            console.log("All false here")
+                            this.Errors.unshift('None schemas are valid');
+                            this._flag = false;
+                            console.log("Flag changed")
+                        } else if (oneArray.filter(x => x == true).length > 1) {
+                            // const myVar = oneArray.filter(x => x == true).length
+                            this.Errors.unshift('More than one shema valid for this data');
+                            this._flag = false;
+                        }
+                        break
+
                 }
             }
-            return (this.Errors.length == 0) ? true : false;
+            console.log(this._errors);
+            document.write("<br>"+"The flag is: " + this._flag);
+            // return (this.Errors.length == 0) ? true : false;
+            return this._flag;
+
+            // return this.Errors[0];
         }
 
     }
     validator = new Validator();
     const isValid = validator.isValid({
-        type: 'number',
-        nullable: true
-    }, null);
-    document.write('<br>' + "isValid result: " + isValid + "<br>")
-    const isValid2 = validator.isValid({
-        type: 'number',
-        nullable: false
-    }, null);
-    document.write('<br>' + "isValid2 result: " + isValid2 + "<br>")
+        type: 'array',
+        enum: [[1], [{e: 'hi'}], [1,2]]
+    }, [{e: 'hi'}]);
+
+    //      expect(isValid).toBeTrue();
+
+
+
     </script>
 </head>
 <body>

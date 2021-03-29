@@ -163,9 +163,15 @@ class Validator {
           }
           break
         case "enum" :
-          if (!(dataToValidate.includes(schema["enum"]))) {
-            this.Errors.push('The enum does not support one of array elements');
-            this._flag = false;
+          const dataJSONVar = JSON.stringify(dataToValidate);
+          const checkResults = []
+          for (const i in schema["enum"]) {
+              const enumJSONvar = JSON.stringify(schema["enum"][i])
+              checkResults.push(dataJSONVar == enumJSONvar);
+          }
+          if (!(checkResults.some(x => x== true))) {
+              this.Errors.push('The enum does not support one of array elements');
+              this._flag = false;
           }
           break
         case "contains" :

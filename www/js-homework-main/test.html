@@ -227,17 +227,18 @@
                         break
                     case "enum" :
                         document.write("Enum!<br>");
-                        // console.log(dataToValidate, typeof dataToValidate);
-                        // console.log(schema["enum"], typeof schema["enum"]);
-                        if (!(schema["enum"].includes(dataToValidate))) {
+                        const dataJSONVar = JSON.stringify(dataToValidate);
+                        const checkResults = []
+                        for (const i in schema["enum"]) {
+                            console.log("Curr elem: " + i + ' ' + schema["enum"][i]);
+                            const enumJSONvar = JSON.stringify(schema["enum"][i])
+                            checkResults.push(dataJSONVar == enumJSONvar);
+                        }
+                        console.log(checkResults);
+                        if (!(checkResults.some(x => x== true))) {
                             this.Errors.push('The enum does not support one of array elements');
                             this._flag = false;
                         }
-                        // for (var i in dataToValidate) {
-                        //     console.log("Curr elem: " + i + ' ' + dataToValidate[i]);
-                        //     console.log((schema["enum"].includes(dataToValidate[i])));
-                        //     if (!(schema["enum"].includes(dataToValidate[i]))) this.Errors.push('The enum does not support one of array elements')
-                        // }
                         break
                     case "contains" :
                         if (!(dataToValidate.includes(schema["contains"]))) {
@@ -373,21 +374,11 @@
     }
     validator = new Validator();
     const isValid = validator.isValid({
-        oneOf: [
-            {
-                type: 'object',
-                additionalProperties: false,
-                properties: {
-                    t: {
-                        type: 'number'
-                    }
-                }
-            },
-            {
-                type: 'object'
-            }
-        ]
-    }, {t: 1});
+        type: 'array',
+        enum: [[1], [{e: 'hi'}], [1,2]]
+    }, [765]);
+
+    //      expect(isValid).toBeTrue();
 
 
 
