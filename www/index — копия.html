@@ -27,31 +27,27 @@
   </div>
   <div  id="addNewUser" class="mainblock">
       <h2>Регистрация</h2>
-      <form method="" autocomplete="on" id = "regForm">
-          <label>User name:
+      <form method="post" autocomplete="on" id = "regForm">
+          <label>Name:
               <input type="text" name="name_reg" required id="regName" autofocus>
           </label>
-          <span id="nameErrorSpan" class = "errorspan" style="background-color: #ff0000"></span>
           <br>
           <label>Password:
               <input type="password" name="password_reg" required id = "regPw">
           </label>
-          <span id="pwErrorSpan" class = "errorspan" style="background-color: #ff0000"></span>
-
           <br>
           <label>Repeat password:
               <input type="password" name="password_reg_repeat" required id = "regRepPw">
           </label>
-          <span id="repPwErrorSpan" class = "errorspan" style="background-color: #ff0000"></span>
-
           <br>
           <label>E-mail:
               <input type="email" name="email_reg" required id =  "regEmail">
           </label>
           <br>
-          <span id="emailErrorSpan"  class = "errorspan"  style="background-color: #ff0000"></span>
-          <p class="centerbutton"><input type="submit" value="AddNewUser" class="centerbutton" id = "submitIt">
+          <span id="emailErrorSpan" style="background-color: #ff0000"></span>
+          <p class="centerbutton"><input type="submit" value="AddNewUser" class="centerbutton" onclick="return CheckFunc()"/>
 <!--          <p class="centerbutton"><input type="submit" value="AddNewUser" class="centerbutton" onclick="return CheckFunc()"/>-->
+
           </p>
       </form>
   </div>
