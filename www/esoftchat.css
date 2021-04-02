@@ -5,7 +5,7 @@
 .mainblock {
 	color: #C71585;
 	display: block;
-	width: 25%;
+	width: 30%;
 	margin: 10px;
 	border: 3px solid #000; 
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -19,7 +19,7 @@
 	background-color: #FFC0CB;
 }
 body {
-	font-family: Georgia, Calibri, sans-serif;
+	font-family: Roboto, Georgia, Calibri, sans-serif;
 	background-color: #FFEFD5;
 	display: flex;
 	flex-direction: column;
@@ -33,6 +33,8 @@ h2 {
 .centerbutton {
 	text-align: center;
 	font-size: 16pt;
+	/*display: inline;*/
+	width: 100%;
 }
 
 label, input {
@@ -42,4 +44,30 @@ label, input {
 
 .errorspan {
 	display: none;
+	color: #000000;
+	background-color: #F08080;
+	text-align: center;
+	margin-bottom: 5px;
+	/*border: 3px solid #000;*/
+	width: 100%;
+
+}
+.totheleft {
+	width: 45%;
+	float: left;
+	text-align: right;
+	margin-right: 5px;
+	margin-left: 10px;
+}
+.totheright {
+	width: 45%;
+	float: right;
+	text-align: left;
+	margin-left: 5px;
+	margin-right: 10px;
+}
+#regForm {
+	display: block;
+	width: 100%;
+	align-items: center;
 }
