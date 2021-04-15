@@ -5,7 +5,7 @@
 .mainblock {
 	color: #C71585;
 	display: block;
-	width: 30%;
+	width: 95%;
 	margin: 10px;
 	border: 3px solid #000; 
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -15,17 +15,41 @@
 	flex-direction: column;
 	align-items: center*/
 }
+.half {
+	color: #C71585;
+	height: 80vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 49%;
+	margin: 10px;
+	border: 3px dotted #000;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
+	padding: 10px;
+	border-radius: 10px; /* Радиус скругления */
+	/*	display: flex;
+        flex-direction: column;
+        align-items: center*/
+}
 #mainheader {
 	background-color: #FFC0CB;
+}
+html {
+	height: 90%;
+	width:99%;
 }
 body {
 	font-family: Roboto, Georgia, Calibri, sans-serif;
 	background-color: #FFEFD5;
 	display: flex;
-	flex-direction: column;
+	width: 100%;
+	flex-direction: row;
 /*	justify-content: center;*/
 	align-items: center;
 	/*flex: none;*/
+	margin: 5px;
+	height: 100%;
+
 }
 h2 {
 	text-align: center
@@ -70,4 +94,35 @@ label, input {
 	display: block;
 	width: 100%;
 	align-items: center;
+}
+
+.vertical-align {
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+section#chatroom {
+	/*border: 3px inset lightblue;*/
+	height: 85%;
+	overflow: auto;
+}
+
+section#input_zone {
+	height: 7%;
+	text-align: center;
+}
+/*input#message {*/
+/*	display: inline-block;*/
+/*	width: 89%;*/
+/*	height: 80%;*/
+/*	font-size: 2vh;*/
+/*}*/
+
+.alert{
+	padding: 10px;
+	margin: 12px;
+	width:auto;
 }

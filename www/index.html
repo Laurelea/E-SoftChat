@@ -3,55 +3,77 @@
 
   <head>
     <meta charset="utf-8">
-    <title>E-soft Chat project</title>
-    <link rel="stylesheet" type="text/css" href="esoftchat.css">
-<!--    <link rel="icon" type="image/png" href="favicon-32x32.png">-->
+      <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="style.css" >
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+      <title>E-soft Chat project</title>
+      <link rel="stylesheet" type="text/css" href="../public/esoftchat.css">
   </head>
 
   <body>
-  <h1 id="mainheader">Тут будет чат</h1>
-  <div id="authorize" class="mainblock">
-      <h2>Авторизация:</h2>
-      <form method="post" id="authForm">
-          <label class="totheleft">E-mail: </label>
-
-          <input type="text" name="email_auth" class = "totheright">
-          <br>
-          <label class="totheleft">Password: </label>
-
-          <input type="password" name="password_auth" class = "totheright">
-          <p class="centerbutton">
-              <input type="submit" value="Enter" class="centerbutton"/>
-          </p>
-      </form>
+  <div class="half" id="forchat">
+      <h1 id="mainheader">Тут будет чат</h1>
+      <section>
+          <div id="change_username">
+              <input id="username" type="text" />
+              <button id="send_username" type="button">Change username</button>
+          </div>
+      </section>
+      <section id="chatroom">
+          <section id="feedback"></section>
+      </section>
+      <section id="input_zone">
+          <input id="message" class="vertical-align" type="text" />
+          <button id="send_message" class="vertical-align" type="button">Send</button>
+      </section>
   </div>
-  <div  id="addNewUser" class="mainblock">
-      <h2>Регистрация</h2>
-      <form method="" autocomplete="on" id = "regForm" onsubmit="return false;">
-          <label class = "totheleft">User name:</label>
-          <input type="text" name="name_reg" required id="regName" autofocus class = "totheright">
-          <span id="nameErrorSpan" class = "errorspan"></span>
-          <br>
-          <label  class = "totheleft">Password:</label>
-          <input type="password" name="password_reg" required id = "regPw" class = "totheright">
-          <span id="pwErrorSpan" class = "errorspan"></span>
-          <br>
-          <label class = "totheleft">Repeat password:</label>
-          <input type="password" name="password_reg_repeat" required id = "regRepPw" class = "totheright">
-          <span id="repPwErrorSpan" class = "errorspan"></span>
+  <div id = "forother" class = "half">
+          <div id="authorize" class="mainblock">
+              <h2>Авторизация:</h2>
+              <form method="post" id="authForm">
+                  <label class="totheleft">E-mail: </label>
 
-          <br>
-          <label class = "totheleft">E-mail:</label>
-          <input type="email" name="email_reg" required id =  "regEmail" class = "totheright">
-          <br>
-          <span id="emailErrorSpan"  class = "errorspan"></span>
-          <br>
+                  <input type="text" name="email_auth" class = "totheright">
+                  <br>
+                  <label class="totheleft">Password: </label>
 
-          <input type="submit" value="AddNewUser" class="centerbutton" id = "submitIt">
-<!--          <p class="centerbutton"><input type="submit" value="AddNewUser" class="centerbutton" onclick="return CheckFunc()"/>-->
-      </form>
+                  <input type="password" name="password_auth" class = "totheright">
+                  <p class="centerbutton">
+                      <input type="submit" value="Enter" class="centerbutton"/>
+                  </p>
+              </form>
+          </div>
+          <div  id="addNewUser" class="mainblock">
+              <h2>Регистрация</h2>
+              <form method="" autocomplete="on" id = "regForm" onsubmit="return false;">
+                  <label class = "totheleft">User name:</label>
+                  <input type="text" name="name_reg" required id="regName" autofocus class = "totheright">
+                  <span id="nameErrorSpan" class = "errorspan"></span>
+                  <br>
+                  <label  class = "totheleft">Password:</label>
+                  <input type="password" name="password_reg" required id = "regPw" class = "totheright">
+                  <span id="pwErrorSpan" class = "errorspan"></span>
+                  <br>
+                  <label class = "totheleft">Repeat password:</label>
+                  <input type="password" name="password_reg_repeat" required id = "regRepPw" class = "totheright">
+                  <span id="repPwErrorSpan" class = "errorspan"></span>
+
+                  <br>
+                  <label class = "totheleft">E-mail:</label>
+                  <input type="email" name="email_reg" required id =  "regEmail" class = "totheright">
+                  <br>
+                  <span id="emailErrorSpan"  class = "errorspan"></span>
+                  <br>
+
+                  <input type="submit" value="AddNewUser" class="centerbutton" id = "submitIt">
+        <!--          <p class="centerbutton"><input type="submit" value="AddNewUser" class="centerbutton" onclick="return CheckFunc()"/>-->
+              </form>
+          </div>
   </div>
-  <script src="esoftchat.js"></script>
+  <script src="../public/esoftchat.js"></script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="chat.js"></script>
   </body>
 
 </html>
