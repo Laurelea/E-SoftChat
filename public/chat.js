@@ -33,11 +33,13 @@ $(function() {
         "</div>"
     );
   });
-
+  //Слушатель. Ждёт, когдат тыкнут кнопку "Сменить имя". См. стр.6 body.ejs
   send_username.click(() => {
-    //Генерируется событие:
+    //Инициируется событие change-username, передаётся массив данных с поля, привязанного к кнопке id username:
     socket.emit("change_username", { username: username.val() });
     alert('Success')
+    document.getElementById("input_zone").hidden = false;
+
   });
 
   message.bind("keypress", () => {
@@ -49,4 +51,13 @@ $(function() {
       "<p><i>" + data.username + " prints message..." + "</i></p>"
     );
   });
+
+  socket.on("new", data => {
+    feedback.html(
+        "<p><i>" + data.username + " joined the Chat" + "</i></p>"
+    )
+    console.log("Smth");
+  });
 });
+
+

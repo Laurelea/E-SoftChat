@@ -4,6 +4,10 @@ const express = require('express')
 const app = express()
 //Порт записали в переменную
 const port = process.env.PORT || 3002
+
+//Подключаем модуль сессий:
+global.session = require(`express-session`)
+
 //Зарегистрировали движок:
 app.set('view engine', 'ejs');
 //Указываем папку для хранения шаблонов:
@@ -11,14 +15,26 @@ app.set('views', 'www')
 //Зарегистрировали папку:
 app.use(express.static("public"));
 
+//Прописываем руты:
 const homeRoutes =  require("./routes/home")
 
+//Это не знаю, зачем:
 app.use(express.json())
 app.use(express.urlencoded({
   extended: true,
 }))
 
+//Регистрируем сессию:
+app.use(session ({
+  secret: `some secret value`,
+  resave: false,
+  saveUninitialized: false
+}))
+
+//Регистрируем руты:
 app.use("/",  homeRoutes)
+
+
 
 //Обрабатываем запрос GET- при загрузке страницы
 //"/" - route handler
@@ -33,6 +49,7 @@ app.use("/",  homeRoutes)
 //   console.log('Server is running on port ${PORT}')
 //
 // })
+
 //Начинаем слушать:
 server = app.listen(port, () => console.log(`Server is running... at http://localhost:${port}`));
 
@@ -47,16 +64,28 @@ server = app.listen(port, () => console.log(`Server is running... at http://loca
 // io.listen(3000);
 //This implicitly starts a Node.js HTTP server, which can be accessed through io.httpServer
 
-
-
+//Подключаем модуль:
 const io = require("socket.io")(server);
+
+
+//Попытка посчитать кол-во пользователей чата, не работает
+global.numberOfUsers = {
+  current: 0,
+  update: function () {
+    this.current = +1
+  }
+};
 
 //Тут объект socket - расширение объекта EventEmitter, socket instance
 //io - server instance
 io.on('connection', (socket) => {
   console.log('New user connected')
-
+  numberOfUsers.update ()
+  console.log (`Всего юзеров: `+ numberOfUsers.current)
   socket.username = "Guest"
+  session.number = +1
+  console.log (`Всего юзеров: `+ session.number)
+
 
   //Это новый  кусок по мануалу https://socket.io/get-started/chat
   //Почему-то работает
@@ -66,9 +95,17 @@ io.on('connection', (socket) => {
   //кончился кусок
 
   //Это слушатель событий. Общий вид: socket.on(eventName, listener)
+  //Получает с сокета клиента инфу о событии и массив данных
   socket.on('change_username', (data) => {
     console.log(socket.username + ' change username on ' + data.username)
     socket.username = data.username
+    // io.sockets.emit ("", {});
+
+    //io.emit - трансляция абсолютно всем участникам, в том числе тому, кто вызывает событие.
+    io.emit('new', {username : socket.username})
+    console.log(socket.username +' new user')
+
+
   })
 
   socket.on('new_message', (data) => {
@@ -78,7 +115,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('typing', (data) => {
-    //broadcast означает, что сообщение покажут всем участникам. Это тоже выводится в браузере:
+    //broadcast означает, что сообщение покажут всем участникам, кроме того, кто печатает: (вызывает событие). Это тоже выводится в браузере:
     socket.broadcast.emit('typing', {username : socket.username})
     console.log(socket.username +' typing')
   })
