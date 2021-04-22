@@ -112,6 +112,9 @@ io.on('connection', (socket) => {
     console.log (`Всего юзеров: `+ numberOfUsers)
     console.log('user disconnected');
 
+    io.emit('disconnect', {username : socket.username, number: numberOfUsers})
+    console.log(socket.username +' disconnected')
+
   });
   //кончился кусок
 

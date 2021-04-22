@@ -51,6 +51,12 @@ $(function() {
       "<p><i>" + data.username + " prints message..." + "</i></p>"
     );
   });
+  socket.on ("disconnect", data => {
+    feedback.html(
+        "<p>" + 'Total users now: ' + data.number + "</p>" +
+        "<p><i>" + data.username + " disconnected" + "</i></p>"
+    )
+  })
 
   socket.on("new", data => {
     feedback.html(
