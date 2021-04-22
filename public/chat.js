@@ -54,6 +54,7 @@ $(function() {
 
   socket.on("new", data => {
     feedback.html(
+        "<p>" + 'Total users now: ' + data.number + "</p>" +
         "<p><i>" + data.username + " joined the Chat" + "</i></p>"
     )
     console.log("Smth");

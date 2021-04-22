@@ -11,7 +11,6 @@ router.get("/", (req, res) => {
         title: "For test",
         isHome: true
     })
-    // req.session.number = +1
 })
 //Экспортируем его:
 module.exports = router

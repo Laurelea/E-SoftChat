@@ -69,28 +69,49 @@ const io = require("socket.io")(server);
 
 
 //Попытка посчитать кол-во пользователей чата, не работает
-global.numberOfUsers = {
-  current: 0,
-  update: function () {
-    this.current = +1
-  }
-};
+// global.numberOfUsers = {
+//   current: 0,
+//   update: function () {
+//     this.current = +1
+//   }
+// };
+//Другой вариант:
+var numberOfUsers = 0;
+
+//Пытаемся работать с БД:
+//Подключаем модуль:
+const pgp = require("pg-promise")(/*options*/);
+
+//Создаём переменную соединения:
+const db = pgp("postgres://laurelea:qwerty@host:5432/esoftchat");
+
+// db.one("SELECT $1 AS value", 123)
+//     .then(function (data) {
+//       console.log("DATA:", data.value);
+//     })
+//     .catch(function (error) {
+//       console.log("ERROR:", error);
+//     });
+
 
 //Тут объект socket - расширение объекта EventEmitter, socket instance
 //io - server instance
 io.on('connection', (socket) => {
   console.log('New user connected')
-  numberOfUsers.update ()
-  console.log (`Всего юзеров: `+ numberOfUsers.current)
+  numberOfUsers  += 1;
+  console.log (`Всего юзеров: `+ numberOfUsers)
   socket.username = "Guest"
-  session.number = +1
-  console.log (`Всего юзеров: `+ session.number)
+  // session.number = +1
+  // console.log (`Всего юзеров: `+ session.number)
 
 
   //Это новый  кусок по мануалу https://socket.io/get-started/chat
   //Почему-то работает
   socket.on('disconnect', () => {
+    numberOfUsers  -= 1;
+    console.log (`Всего юзеров: `+ numberOfUsers)
     console.log('user disconnected');
+
   });
   //кончился кусок
 
@@ -102,7 +123,7 @@ io.on('connection', (socket) => {
     // io.sockets.emit ("", {});
 
     //io.emit - трансляция абсолютно всем участникам, в том числе тому, кто вызывает событие.
-    io.emit('new', {username : socket.username})
+    io.emit('new', {username : socket.username, number: numberOfUsers})
     console.log(socket.username +' new user')
 
 
