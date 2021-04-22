@@ -17,6 +17,7 @@ app.use(express.static("public"));
 
 //Прописываем руты:
 const homeRoutes =  require("./routes/home")
+const authRoutes =  require("./routes/auth")
 
 //Это не знаю, зачем:
 app.use(express.json())
@@ -33,6 +34,7 @@ app.use(session ({
 
 //Регистрируем руты:
 app.use("/",  homeRoutes)
+app.use("/auth",  authRoutes)
 
 
 
@@ -78,20 +80,7 @@ const io = require("socket.io")(server);
 //Другой вариант:
 var numberOfUsers = 0;
 
-//Пытаемся работать с БД:
-//Подключаем модуль:
-const pgp = require("pg-promise")(/*options*/);
 
-//Создаём переменную соединения:
-const db = pgp("postgres://laurelea:qwerty@host:5432/esoftchat");
-
-// db.one("SELECT $1 AS value", 123)
-//     .then(function (data) {
-//       console.log("DATA:", data.value);
-//     })
-//     .catch(function (error) {
-//       console.log("ERROR:", error);
-//     });
 
 
 //Тут объект socket - расширение объекта EventEmitter, socket instance

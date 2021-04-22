@@ -2,13 +2,14 @@
 <html lang="ru">
 <%- include('./partials/head') %>
 <body>
-
-<!--{{> navbar}}-->
-<!--<h1>{{title}}</h1>-->
-<!--<div class="container">-->
-    <%- include('./partials/body') %>
-<!--</div>-->
-
+<div id = "forother" class = "half">
+    <!--<%- include('./partials/chat') %>-->
+    <div>Please authorize to see the CHAT</div>
+</div>
+<div id = "forother" class = "half">
+    <%- include('./partials/auth_field') %>
+    <%- include('./partials/reg_field') %>
+</div>
 <%- include('./partials/footer') %>
 </body>
 </html>
