@@ -1,12 +1,16 @@
 //Подключили модуль
 const express = require('express')
+
 //Создали инстанс. = function handler
 const app = express()
 //Порт записали в переменную
 const port = process.env.PORT || 3002
 
+//app = переменная сервера.
+
+
 //Подключаем модуль сессий:
-global.session = require(`express-session`)
+session = require(`express-session`)
 
 //Зарегистрировали движок:
 app.set('view engine', 'ejs');
@@ -18,6 +22,7 @@ app.use(express.static("public"));
 //Прописываем руты:
 const homeRoutes =  require("./routes/home")
 const authRoutes =  require("./routes/auth")
+const userRouter = require('./routes/user.routes')
 
 //Это не знаю, зачем:
 app.use(express.json())
@@ -35,6 +40,7 @@ app.use(session ({
 //Регистрируем руты:
 app.use("/",  homeRoutes)
 app.use("/auth",  authRoutes)
+app.use("/api",  userRouter)
 
 
 
